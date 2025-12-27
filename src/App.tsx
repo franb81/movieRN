@@ -1,11 +1,16 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { Text, View } from 'react-native';
 import { HomeScreen } from './presentation/screens/home/HomeScreen';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export const App = () => {
   return (
-    <NavigationContainer>
-      <HomeScreen />
-    </NavigationContainer>
+    <GestureHandlerRootView>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <HomeScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 };

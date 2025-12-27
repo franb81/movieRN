@@ -8,6 +8,9 @@ export const UseMovies = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [nowPlaying, setnowPlaying] = useState<Movie[]>([]);
+  const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
+  const [topRated, setTopRated] = useState<Movie[]>([]);
+  const [upComming, setUpComming] = useState<Movie[]>([]);
 
   useEffect(() => {
     console.log('disparando el useMovies');
@@ -15,10 +18,29 @@ export const UseMovies = () => {
   }, []);
 
   const initialLoad = async () => {
-    const nowPlayingMovies = await UseCases.moviesNowPlayingUseCase(
-      movieDBFetcher,
-    );
+    const nowPlayingPromise = UseCases.moviesNowPlayingUseCase(movieDBFetcher);
+    const popularPromise = UseCases.moviesPopularUseCase(movieDBFetcher);
+    const topRatedPromise = UseCases.moviesTopRatedUseCase(movieDBFetcher);
+    const upCommingPromise = UseCases.upComing(movieDBFetcher);
+
+    const [nowPlayingMovies, popularMovies, topRatedMovies, upCommingMovies] =
+      await Promise.all([
+        nowPlayingPromise,
+        popularPromise,
+        topRatedPromise,
+        upCommingPromise,
+      ]);
+
+    setnowPlaying(nowPlayingMovies);
+    setPopularMovies(popularMovies);
+    setTopRated(topRatedMovies);
+    setUpComming(upCommingMovies);
+
+    setIsLoading(false);
   };
 
-  return {};
+  return {
+    isLoading,
+    nowPlaying,
+  };
 };

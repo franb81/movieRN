@@ -1,15 +1,13 @@
 import { HttpAdapter } from '../../../config/adapters/http/http.adapter';
 import { NowPlayingResponse } from '../../../infrastructure/interfaces/movie-db.responses';
 import { MovieMapper } from '../../../infrastructure/mappers/movie.mapper';
-import type { Movie } from '../../entities/movie.entity';
+import { Movie } from '../../entities/movie.entity';
 
-export const moviesNowPlayingUseCase = async (
-  fetcher: HttpAdapter,
-): Promise<Movie[]> => {
+export const upComing = async (fetcher: HttpAdapter): Promise<Movie[]> => {
   try {
-    const nowPlaying = await fetcher.get<NowPlayingResponse>('/now_playing');
+    const resUpcoming = await fetcher.get<NowPlayingResponse>('/upcoming');
 
-    return nowPlaying.results.map(result =>
+    return resUpcoming.results.map(result =>
       MovieMapper.fromMovieDBResultToEntity(result),
     );
   } catch (error) {
